@@ -78,7 +78,7 @@ local function setBurnEffect(enemyCharacter)
 	task.spawn(function()
 		for i = 1, math.random(1,5) do -- repeat the code below in a random number beetwen 1 and 5
 			humanoid.Health -= math.random(1, 10) -- subtract humanoid health to a random number between 1 and 10 
-			task.wait(1) -- add countdown
+			task.wait(1) -- wait before subtract humanoid health again
 		end	
 	end)
 
@@ -261,3 +261,4 @@ attackEvent.OnServerEvent:Connect(function(player: Player, attackName: string, m
 		attack(player, mousePos) -- execute the attack function
 	end
 end)
+
