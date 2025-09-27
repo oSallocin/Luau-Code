@@ -35,7 +35,7 @@ local function setFireStaff()
 end
 
 local function setFireEffect(part: BasePart, destroyAfter: boolean, timeToDestroy: number?)
-	local fire = Instance.new("ParticleEmitter") -- creates fire
+	local fire = Instance.new("ParticleEmitter") -- creates fire effect particle emitter
 	fire.Color = ColorSequence.new(Color3.new(1, 0.333333, 0)) -- set color
 	fire.Size = NumberSequence.new(1,5) -- set size
 	fire.LightEmission = 1 -- set light emission
@@ -59,7 +59,7 @@ local function setLinearVelocity(part: BasePart, direction: Vector3, destroyAfte
 	velocity.Parent = part -- set parent to part
 
 	if destroyAfter then -- if destroyAfter is true then
-		addToDebris(velocity, timeToDestroy or 0.1) -- remove velocity after 0.1 seconds
+		addToDebris(velocity, timeToDestroy) 
 	end
 end
 
@@ -243,9 +243,7 @@ local Attacks = {
 
 		TweenService:Create(explosion, tweenInfo, goal):Play() -- play the tween
 		task.delay(0.45, function() -- after 0.5 seconds, execute function
-
-			addToDebris(explosion, 0.5)
-			touchedProjectile(player, explosion, 50) 
+			touchedProjectile(player, explosion, 50, true) 
 		end)
 		setCountdown() 
 	end,
@@ -261,4 +259,5 @@ attackEvent.OnServerEvent:Connect(function(player: Player, attackName: string, m
 		attack(player, mousePos) -- execute the attack function
 	end
 end)
+
 
