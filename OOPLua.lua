@@ -5,6 +5,7 @@ local ServerScriptService = game:GetService("ServerScriptService") -- gets the S
 local ReplicatedStorage = game:GetService("ReplicatedStorage") -- gets the ReplicatedStorage
 
 local Click = ReplicatedStorage.Click -- gets the Click Event 
+
 local Players = game:GetService("Players") -- gets the Player Event
 local Debris = game:GetService("Debris") -- get the Debris event, to remove the hitbox
 
@@ -160,7 +161,7 @@ function Combat:RightClick()
 	local enemy = self:Hitbox(hitbox) -- get the enemy from the hitbox
 	if enemy then -- if the enemy is not nil then
 		self:SetDamage(enemy, "RightClick") -- set the damage to the enemy
-		self:ApplyKnockback(enemy, 50) -- apply knockback to the enemy
+		self:ApplyKnockback(enemy, 70) -- apply knockback to the enemy
 	end
 
 	self:ApplyCountdown(2) -- apply countdown to the player
@@ -184,12 +185,14 @@ end
 function Combat:ApplyKnockback(character: Model, power: number) 
 	local root = character:FindFirstChild("HumanoidRootPart") -- find the root part of the character
 	if not root then return end -- if there is no root part then return nothing, and stops function
+	
+	local direction = (character.HumanoidRootPart.Position - self.rootPart.Position).Unit * -power
 
 	local linearVelocity = Instance.new("LinearVelocity") -- create a linear velocity
 	linearVelocity.MaxForce = math.huge -- set the max force to infinity
 	linearVelocity.Attachment0 = Instance.new("Attachment", root) -- create an attachment on the root part
 	linearVelocity.RelativeTo = Enum.ActuatorRelativeTo.World -- set the relative to world
-	linearVelocity.VectorVelocity = self.rootPart.CFrame.LookVector * power -- set the velocity of the linear velocity
+	linearVelocity.VectorVelocity = self.rootPart.CFrame.LookVector * direction -- set the velocity of the linear velocity
 	linearVelocity.Parent = root -- parent the linear velocity to the root part
 
 	Debris:AddItem(linearVelocity, 0.2) -- after 0.2 seconds, destroy the linearVelocity
@@ -256,5 +259,39 @@ function Combat:BlockOff()
 	self.isBlocking = false -- set the blocking status to false
 	self.canAttack = true -- set the attack status to true
 end
+
+-- Quadratic Bezier curve function
+local p0 = Vector3.new(0,0,0) -- starting point
+local p1 = Vector3.new(0, 10, 10) -- control point (influences curve direction)
+local p2 = Vector3.new(10, 0, 20) -- ending point
+local segments = 25 -- more segments = smoother curve
+local curvePoints = {} -- array to hold Vector3 positions
+
+local function QuadraticBezier(t, p0, p1, p2)
+	-- bezier formula: b(t) = (1 - t)^2 * P0 + 2 * (1 - t) * t * P1 + t^2 * P2
+	local oneMinusT = 1 - t -- calculate (1 - t)
+	local point = (oneMinusT^2) * p0 -- (1 - t)^2 * P0
+		+ 2 * oneMinusT * t * p1 -- 2 * (1 - t) * t * P1
+		+ (t^2) * p2 -- t^2 * P2
+	return point -- return final position on curve
+end
+
+for i = 0, segments do
+	local t = i / segments --normalized progress (0 to 1)
+	local pos = QuadraticBezier(t, p0, p1, p2) -- get position at t
+	table.insert(curvePoints, pos) -- store it in the array
+	
+	local part = Instance.new("Part") -- create part instance
+	part.Size = Vector3.new(0.3, 0.3, 0.3) -- small cube size
+	part.Shape = Enum.PartType.Ball -- make it spherical
+	part.Anchored = true -- keep it static
+	part.Position = pos -- place part on curve position
+	part.Color = Color3.fromRGB(255, 0, 0) -- red for visibility
+	part.Material = Enum.Material.Neon -- makes it stand out
+	part.CanCollide = false -- sets the part to false, so it can't collide with other parts
+	part.Parent = workspace -- add to Workspace
+end
+
+print("i generated a bezier curve with", #curvePoints, " points")
 
 return Combat
