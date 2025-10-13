@@ -18,16 +18,16 @@ function Combat.new(player: Player) -- create a new instance of combat object fo
 	self.rootPart = self.character:FindFirstChild("HumanoidRootPart") -- gets the root part of the character
 	
 	self.showHitbox = true -- show the hitbox
-	self.canAttack = true -- variable to check if the player can attack
-	self.canBlock = true -- variable to check if the player can block
-	self.lastHit = false -- variable to check if its the player's last hit
+	self.canAttack = true --  to check if the player can attack
+	self.canBlock = true --  to check if the player can block
+	self.lastHit = false --  to check if its the player's last hit
 	self.kbPower = 5 -- knockback power
 
-	self.isBlocking = false -- variable to check if the player is blocking
-	self.isDashing = false -- variable to check if the player is dashing
-	self.clickDamage = 4.5 -- variable to damage of the click attack
-	self.lastHitDamage = 10 -- variable to damage of the last hit 
-	self.combo = 1 -- variable to check the combo of the player
+	self.isBlocking = false --  to check if the player is blocking
+	self.isDashing = false --  to check if the player is dashing
+	self.clickDamage = 4.5 --  to damage of the click attack
+	self.lastHitDamage = 10 --  to damage of the last hit 
+	self.combo = 1 --  to check the combo of the player
 	self.maxCombo = 5 -- max combo of the player
 	self.comboResetTime = 2.5 -- time to reset the combo
 	self.comboResetTask = nil -- task to reset the combo
@@ -79,7 +79,7 @@ end
 -- Get Player Blocking Status Function
 function Combat:PlayerIsBlocking(player: Player)
 	local Initializer = require(ServerScriptService.Modules.Initializer) -- gets the combat Initializer Module
-	return Initializer:GetPlayer(player):GetBlocking() -- executes the function GetBlocking, that returns the player isBlocking variable
+	return Initializer:GetPlayer(player):GetBlocking() -- executes the function GetBlocking, that returns the player isBlocking
 end
 
 -- Show Hitbox Function
@@ -100,7 +100,7 @@ function Combat:ShowHitbox(size: Vector3)
 -- Normal Click Attack Function
 function Combat:Click()
 
-		if not self.canAttack then -- if the player variable "canAttack" is false then
+		if not self.canAttack then -- if the player  "canAttack" is false then
 			return -- returns nothing, and stop the function
 		end
 
@@ -293,4 +293,3 @@ end
 print("i generated a bezier curve with", #curvePoints, " points")
 
 return Combat
-
