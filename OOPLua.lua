@@ -274,7 +274,7 @@ local function QuadraticBezier(t, p0, p1, p2)
 	return point -- return final position on curve
 end
 
-for i = 0, segments do
+for i = 0, segments do -- generate points along the curve
 	local t = i / segments --normalized progress (0 to 1)
 	local pos = QuadraticBezier(t, p0, p1, p2) -- get position at t
 	table.insert(curvePoints, pos) -- store it in the array
@@ -293,3 +293,4 @@ end
 print("i generated a bezier curve with", #curvePoints, " points")
 
 return Combat
+
