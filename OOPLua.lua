@@ -185,14 +185,12 @@ end
 function Combat:ApplyKnockback(character: Model, power: number) 
 	local root = character:FindFirstChild("HumanoidRootPart") -- find the root part of the character
 	if not root then return end -- if there is no root part then return nothing, and stops function
-	
-	local direction = (character.HumanoidRootPart.Position - self.rootPart.Position).Unit * -power
 
 	local linearVelocity = Instance.new("LinearVelocity") -- create a linear velocity
 	linearVelocity.MaxForce = math.huge -- set the max force to infinity
 	linearVelocity.Attachment0 = Instance.new("Attachment", root) -- create an attachment on the root part
 	linearVelocity.RelativeTo = Enum.ActuatorRelativeTo.World -- set the relative to world
-	linearVelocity.VectorVelocity = self.rootPart.CFrame.LookVector * direction -- set the velocity of the linear velocity
+	linearVelocity.VectorVelocity = self.rootPart.CFrame.LookVector * power -- set the velocity of the linear velocity
 	linearVelocity.Parent = root -- parent the linear velocity to the root part
 
 	Debris:AddItem(linearVelocity, 0.2) -- after 0.2 seconds, destroy the linearVelocity
@@ -288,7 +286,7 @@ for i = 0, segments do
 	part.Position = pos -- place part on curve position
 	part.Color = Color3.fromRGB(255, 0, 0) -- red for visibility
 	part.Material = Enum.Material.Neon -- makes it stand out
-	part.CanCollide = false -- sets the part to false, so it can't collide with other parts
+	part.CanCollide = false -- disable collision
 	part.Parent = workspace -- add to Workspace
 end
 
